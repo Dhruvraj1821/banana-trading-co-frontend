@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useUser } from "../context/UserContext";
 import { PixelPanel } from "./PixelPanel";
+import { PixelButton } from "./PixelButton";
 
 export function TraderOnboarding() {
   const { createTrader, error } = useUser();
@@ -32,13 +33,9 @@ export function TraderOnboarding() {
             onChange={(e) => setUsername(e.target.value)}
           />
           {error && <p className="font-data text-loss text-xs mb-3">{error}</p>}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="font-pixel text-xs bg-banana text-bg border-2 border-border px-4 py-2 w-full disabled:opacity-50"
-          >
+          <PixelButton type="submit" disabled={submitting} className="w-full">
             {submitting ? "creating..." : "start trading"}
-          </button>
+          </PixelButton>
         </form>
       </PixelPanel>
     </div>

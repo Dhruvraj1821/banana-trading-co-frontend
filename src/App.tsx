@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CardList } from "./pages/CardList";
 import { CardDetail } from "./pages/CardDetail";
-import { UserProvider, useUser } from "./context/UserContext";
-import { TraderOnboarding } from "./components/TraderOnboarding";
 import { Portfolio } from "./pages/Portfolio";
+import { UserProvider, useUser } from "./context/UserContext";
+import { ToastProvider } from "./context/ToastContext";
+import { ToastContainer } from "./components/ToastContainer";
+import { TraderOnboarding } from "./components/TraderOnboarding";
 
 function AppRoutes() {
   const { user, loading } = useUser();
@@ -27,9 +29,12 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <UserProvider>
-        <AppRoutes />
-      </UserProvider>
+      <ToastProvider>
+        <UserProvider>
+          <AppRoutes />
+        </UserProvider>
+        <ToastContainer />
+      </ToastProvider>
     </BrowserRouter>
   );
 }
