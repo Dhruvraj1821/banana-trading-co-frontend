@@ -76,7 +76,7 @@ export function CardDetail() {
         <p className="font-data text-text-dim text-sm">Total Supply</p>
         <p className="font-data">{card.total_supply.toLocaleString()}</p>
       </PixelPanel>
-      <TradeForm cardId={card.id} onTraded={() => api.getCard(card.id).then(setCard)} />
+      <TradeForm card={card} onTraded={() => api.getCard(card.id).then(setCard)} />
     </div>
   );
 }
