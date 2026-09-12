@@ -7,6 +7,8 @@ import { UserBadge } from "../components/UserBadge";
 import { TradeForm } from "../components/TradeForm";
 import { PriceChart } from "../components/PriceChart";
 import type { Card } from "../types/api";
+import { PageContainer } from "../components/PageContainer";
+import { PixelSpinner } from "../components/PixelSpinner";
 
 export function CardDetail() {
   const { cardId } = useParams<{ cardId: string }>();
@@ -18,7 +20,9 @@ export function CardDetail() {
   }, [cardId]);
 
   if (!card) {
-    return <p className="font-data text-text-dim p-8">Loading...</p>;
+    return <PageContainer>
+      <PixelSpinner label="loading card..." />
+    </PageContainer>
   }
 
   return <CardDetailContent card={card} onCardUpdate={setCard} />;
@@ -44,9 +48,13 @@ function CardDetailContent({
       </Link>
 
       <h1 className="font-pixel text-banana text-2xl mb-2">{card.name}</h1>
-      <p className="font-data text-text-dim text-xs mb-6">
-        {connected ? "● live" : "○ connecting..."}
-      </p>
+      <div className="m-6">
+        {connected? (
+          <p className="font-data text-gain text-xs">● live</p>
+        ) : (
+          <PixelSpinner label="connecting..." />
+        )}
+      </div>
 
       <PixelPanel className="mb-6">
         <p className="font-data text-text-dim text-sm mb-2">Current Price</p>

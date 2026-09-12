@@ -6,6 +6,8 @@ import { PixelPanel } from "../components/PixelPanel";
 import { UserBadge } from "../components/UserBadge";
 import { PnlValue } from "../components/PnlValue";
 import type { Portfolio as PortfolioType } from "../types/api";
+import { PageContainer } from "../components/PageContainer";
+import { PixelSpinner } from "../components/PixelSpinner";
 
 export function Portfolio() {
   const { user } = useUser();
@@ -21,11 +23,15 @@ export function Portfolio() {
   }, [user]);
 
   if (loading || !portfolio) {
-    return <p className="font-data text-text-dim p-8">Loading portfolio...</p>;
+    return (
+      <PageContainer>
+        <PixelSpinner label="loading portfolio..." />
+      </PageContainer>
+    )
   }
 
   return (
-    <div className="p-8">
+    <PageContainer>
       <Link to="/" className="font-data text-text-dim text-sm mb-4 inline-block">
         &larr; back to markets
       </Link>
@@ -75,6 +81,6 @@ export function Portfolio() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

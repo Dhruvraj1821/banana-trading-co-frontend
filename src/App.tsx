@@ -6,12 +6,17 @@ import { UserProvider, useUser } from "./context/UserContext";
 import { ToastProvider } from "./context/ToastContext";
 import { ToastContainer } from "./components/ToastContainer";
 import { TraderOnboarding } from "./components/TraderOnboarding";
+import { PixelSpinner } from "./components/PixelSpinner";
 
 function AppRoutes() {
   const { user, loading } = useUser();
 
   if (loading) {
-    return <p className="font-data text-text-dim p-8">Loading...</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <PixelSpinner label="loading..." />
+      </div>
+    );
   }
   if (!user) {
     return <TraderOnboarding />;
