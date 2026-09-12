@@ -5,6 +5,8 @@ import { api } from "../lib/api";
 import { useCardPriceStream } from "../hooks/useCardPriceStream";
 import { PixelPanel } from "../components/PixelPanel";
 import type { Card } from "../types/api";
+import { UserBadge } from "../components/UserBadge";
+import { TradeForm } from "../components/TradeForm";
 
 export function CardDetail() {
   const { cardId } = useParams<{ cardId: string }>();
@@ -29,6 +31,7 @@ export function CardDetail() {
       <Link to="/" className="font-data text-text-dim text-sm mb-4 inline-block">
         &larr; back to markets
       </Link>
+      <UserBadge />
       <h1 className="font-pixel text-banana text-2xl mb-2">{card.name}</h1>
       <p className="font-data text-text-dim text-xs mb-6">
         {connected ? "● live" : "○ connecting..."}
@@ -72,6 +75,7 @@ export function CardDetail() {
         <p className="font-data text-text-dim text-sm">Total Supply</p>
         <p className="font-data">{card.total_supply.toLocaleString()}</p>
       </PixelPanel>
+      <TradeForm cardId={card.id} onTraded={() => api.getCard(card.id).then(setCard)} />
     </div>
   );
 }
