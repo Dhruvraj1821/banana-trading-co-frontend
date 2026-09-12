@@ -23,6 +23,7 @@ export function CardList() {
   return (
     <div className="p-8">
       <UserBadge />
+      <Link to="/portfolio" className="font-data text-banana text-xs mb-4 inline-block"> view portfolio →</Link>
       <h1 className="font-pixel text-banana text-2xl mb-6">Markets</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {cards.map((card) => (

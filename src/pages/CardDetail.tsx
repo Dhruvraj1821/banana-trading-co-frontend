@@ -32,6 +32,7 @@ export function CardDetail() {
         &larr; back to markets
       </Link>
       <UserBadge />
+      <Link to="/portfolio" className="font-data text-banana text-xs mb-4 inline-block"> view portfolio →</Link>
       <h1 className="font-pixel text-banana text-2xl mb-2">{card.name}</h1>
       <p className="font-data text-text-dim text-xs mb-6">
         {connected ? "● live" : "○ connecting..."}
