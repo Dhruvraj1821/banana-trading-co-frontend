@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import type { PriceUpdate } from "../types/api";
 
-interface PricePoint {
+export interface PricePoint {
   time: string;
   price: number;
+  event: "initial" | "trade" | "drift";
 }
 
 export function useCardPriceStream(cardId: string, initialPrice: number) {
   const [history, setHistory] = useState<PricePoint[]>([
-    { time: new Date().toLocaleTimeString(), price: initialPrice },
+    { time: new Date().toLocaleTimeString(), price: initialPrice, event: "initial" },
   ]);
   const [connected, setConnected] = useState(false);
   const wsRef = useRef<WebSocket | null>(null);
@@ -21,13 +22,16 @@ export function useCardPriceStream(cardId: string, initialPrice: number) {
     ws.onopen = () => setConnected(true);
     ws.onclose = () => setConnected(false);
 
-    ws.onmessage = (event) => {
-      const data: PriceUpdate = JSON.parse(event.data);
+    ws.onmessage = (wsEvent) => {
+      const data: PriceUpdate = JSON.parse(wsEvent.data);
       if (data.event === "subscribed") return;
 
+      const eventType: "trade" | "drift" = data.event;
+      const price = data.price;
+
       setHistory((prev) => [
-        ...prev.slice(-49), // keep at most the last 50 points
-        { time: new Date().toLocaleTimeString(), price: data.price },
+        ...prev.slice(-49),
+        { time: new Date().toLocaleTimeString(), price, event: eventType },
       ]);
     };
 
