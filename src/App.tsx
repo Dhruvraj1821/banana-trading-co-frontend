@@ -1,16 +1,15 @@
-import { PixelPanel } from "./components/PixelPanel";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CardList } from "./pages/CardList";
+import { CardDetail } from "./pages/CardDetail";
 
 function App() {
   return (
-    <div className="min-h-screen p-8">
-      <h1 className="font-pixel text-banana text-2xl mb-6">
-        Banana Trading Co.
-      </h1>
-      <PixelPanel className="max-w-sm">
-        <p className="font-data text-text-dim text-sm mb-2">Sample Price</p>
-        <p className="font-data text-gain text-3xl">$10.42</p>
-      </PixelPanel>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<CardList />} />
+        <Route path="/cards/:cardId" element={<CardDetail />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
