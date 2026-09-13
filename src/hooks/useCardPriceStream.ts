@@ -7,22 +7,28 @@ export interface PricePoint {
   event: "initial" | "trade" | "drift";
 }
 
-export function useCardPriceStream(cardId: string, initialPrice: number) {
+export function useCardPriceStream(cardId: string, initialPrice: number, maxPoints = 50) {
   const [history, setHistory] = useState<PricePoint[]>([
     { time: new Date().toLocaleTimeString(), price: initialPrice, event: "initial" },
   ]);
   const [connected, setConnected] = useState(false);
-  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    const wsUrl = `ws://localhost:8000/ws/cards/${cardId}`;
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
+    let cancelled = false;
+    const ws = new WebSocket(`ws://localhost:8000/ws/cards/${cardId}`);
 
-    ws.onopen = () => setConnected(true);
-    ws.onclose = () => setConnected(false);
+    ws.onopen = () => {
+      if (!cancelled) setConnected(true);
+    };
+    ws.onclose = () => {
+      if (!cancelled) setConnected(false);
+    };
+    ws.onerror = () => {
+      // swallow; onclose fires right after and handles state
+    };
 
     ws.onmessage = (wsEvent) => {
+      if (cancelled) return;
       const data: PriceUpdate = JSON.parse(wsEvent.data);
       if (data.event === "subscribed") return;
 
@@ -30,15 +36,23 @@ export function useCardPriceStream(cardId: string, initialPrice: number) {
       const price = data.price;
 
       setHistory((prev) => [
-        ...prev.slice(-49),
+        ...prev.slice(-(maxPoints - 1)),
         { time: new Date().toLocaleTimeString(), price, event: eventType },
       ]);
     };
 
     return () => {
-      ws.close();
+      cancelled = true;
+      if (ws.readyState === WebSocket.CONNECTING) {
+        // don't close a socket that hasn't finished opening yet, wait
+        // for it to open, then close it immediately, this is what
+        // avoids the "closed before connection established" error.
+        ws.onopen = () => ws.close();
+      } else {
+        ws.close();
+      }
     };
-  }, [cardId]);
+  }, [cardId, maxPoints]);
 
   const latestPrice = history[history.length - 1]?.price ?? initialPrice;
 
