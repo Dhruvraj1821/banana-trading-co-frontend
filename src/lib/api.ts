@@ -1,4 +1,12 @@
-import type { User, Card, Trade, Portfolio } from "../types/api";
+import type {
+  User,
+  Card,
+  Trade,
+  Portfolio,
+  LeaderboardEntry,
+  CreatorLeaderboardEntry,
+  Newspaper,
+} from "../types/api";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -41,4 +49,12 @@ export const api = {
     side: "buy" | "sell";
     amount: number;
   }) => request<Trade>("/trades/", { method: "POST", body: JSON.stringify(payload) }),
+
+  getLeaderboardNetworth: () => request<LeaderboardEntry[]>("/leaderboard/networth"),
+
+  getLeaderboardRoi: () => request<LeaderboardEntry[]>("/leaderboard/roi"),
+
+  getLeaderboardCreators: () => request<CreatorLeaderboardEntry[]>("/leaderboard/creators"),
+  
+  getNewspaper: () => request<Newspaper>("/newspaper/latest"),
 };

@@ -51,3 +51,47 @@ export interface PriceUpdate {
   price: number;
   event: "trade" | "drift" | "subscribed";
 }
+
+export interface LeaderboardEntry {
+  user_id: string;
+  username: string;
+  net_worth: number;
+  roi_pct: number;
+}
+
+export interface CreatorLeaderboardEntry {
+  user_id: string;
+  username: string;
+  card_count: number;
+  total_trading_volume: number;
+}
+
+export interface GainerLoser {
+  card_id: string;
+  card_name: string;
+  pct_change: number;
+  latest_price: number;
+}
+
+export interface NewListing {
+  card_id: string;
+  card_name: string;
+  creator_username: string;
+  total_supply: number;
+}
+
+export interface WhaleTrade {
+  card_name: string;
+  username: string;
+  side: "buy" | "sell";
+  currency_value: number;
+}
+
+export interface Newspaper {
+  generated_at: string;
+  headlines: string[];
+  top_gainers: GainerLoser[];
+  top_losers: GainerLoser[];
+  new_listings: NewListing[];
+  whale_trades: WhaleTrade[];
+}
